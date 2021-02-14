@@ -1,0 +1,280 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function(){
+        $("#c-box").hide();
+        $("#s2-btn").hide();
+        var otp_val;
+        var gen;
+        $("#s-btn").click(function(e){
+          e.preventDefault();
+          var string = /^[1-9]{1}[0-9]{9}$/;
+          var number = $("#pn").val();
+          var test = string.test(number);
+          var fname = $("#f-name").val();
+          var lname = $("#l-name").val();
+          var dob = $("#dob").val();
+          var ye = parseInt(dob.charAt(0) + dob.charAt(1) + dob.charAt(2) + dob.charAt(3));
+          var pass = $("#pass").val();
+          var cpass = $("#c-pass").val();
+          var chk = document.getElementById("chk").checked;
+          if (document.getElementById('id1').checked) {
+            gen = document.getElementById('id1').value;
+          }
+          if (document.getElementById('id2').checked) {
+            gen = document.getElementById('id2').value;
+          }
+          if (document.getElementById('id3').checked) {
+            gen = document.getElementById('id3').value;
+          }
+          if (number=="" || fname=="" || lname=="" || dob=="" || pass=="" || cpass=="" || gen==""){
+            document.getElementById("o-err").innerHTML="Please fill all blank spaces select otions correctly!";
+            return false;
+          }
+          if(ye>2002){
+            document.getElementById("o-err").innerHTML="You must be of 18 to Post";
+            return false;
+          }
+          if (!test){
+            document.getElementById("o-err").innerHTML="please enter correct number!";
+            return false;
+          }
+          if (pass.lenght<8){
+            document.getElementById("o-err").innerHTML="Please enter password of atleast 8 digit";
+            return false;
+          }
+          if(!chk){
+            document.getElementById("o-err").innerHTML="You must agree to our term and conditions to proceed";
+            return false;
+          }
+          if(pass != cpass){
+            document.getElementById("o-err").innerHTML="Password not matching";
+            return false;
+          }
+          else {
+            document.getElementById("o-err").innerHTML="";
+            $.ajax({
+              type: "POST",
+              url: "/get_otp",
+              data: {
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                number:$("#pn").val(),
+              },
+              dataType : "html",
+              success: function (data) {
+                var json_obj = JSON.parse(data);
+                if (json_obj.status=="1"){
+                  $("#f-box").hide();
+                  $("#c-box").show();
+                  otp_val=json_obj.msg;
+                }
+                if (json_obj.status=="0"){
+                  document.getElementById("o-err").innerHTML=json_obj.msg;
+                }
+              }
+            });
+            return true;
+          }
+        });
+        $("#v-btn").click(function(e){
+          e.preventDefault();
+          var e_otp = $("#e-otp").val();
+          if(otp_val==e_otp){
+          $.ajax({
+            type: "POST",
+            url: "/signup",
+            data: {
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+              number:$("#pn").val(),
+              first_name:$("#f-name").val(),
+              last_name:$("#l-name").val(),
+              date_birth:$("#dob").val(),
+              password:$("#pass").val(),
+              email:$("#email").val(),
+              gender:gen,
+            },
+            dataType : "html",
+            success: function (data) {
+              var object = JSON.parse(data);
+              if (object.status=="1"){
+                window.location.href = object.msg;
+              }
+            }
+          });
+        }
+        if(otp_val!=e_otp){
+          document.getElementById("v-err").innerHTML="Wrong otp please enter correct otp";
+        }
+        });
+      });
+    </script>
+    <link rel="stylesheet" href="{% static 'CSS/structure.css'%}">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Sign Up</title>
+  </head>
+  <body style="background-color: cadetblue;">
+<!------------------------------------------------------------------>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Categorie
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="poster">Post Your Item </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="login">Login </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav mr-auto">
+      <a class="navbar-brand" href="#" style="color:green;">JaldiSell</a>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+<!------------------------------------------------------------------>
+  <div class="card" style="width: 40rem;background: rgba(00, 00, 00, 0.0)" id="f-box">
+    <div class="card-body">
+        <div class="container">
+        <form>
+          {% csrf_token %}
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="f-name">First Name</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="text" id="f-name" class="form-control" >
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="l-name">Last Name</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="text" id="l-name" class="form-control" >
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="pn">Phone Number</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="tel" id="pn" pattern="[2-9]{2}[0-9]{8}" maxlength="10" class="form-control" >
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="dob">Date of Birth</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="date" id="dob" class="form-control" >
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="exampleInputPassword1">Password</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="password" id="pass" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="exampleInputPassword1">Confirm Password</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="password" id="c-pass" class="form-control" >
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <div class="form-group">
+                  <label style="color: white;" for="email">Email(optional)</label>
+                  <input style="background: rgba(00, 00, 00, 0.4);color:white" type="email" id="email" class="form-control" >
+                  </div>
+              </div>
+              <div class="col-sm">
+                <br>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="id1" value="Male">
+                  <label class="form-check-label" style="color: white;" for="id1">Male</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="id2" value="Female">
+                  <label class="form-check-label" style="color: white;" for="id2">Female</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="id3" value="Others">
+                  <label class="form-check-label" style="color: white;" for="id3">Others</label>
+                </div>
+              </div>
+            </div>
+            <div style="font-weight:bold;color:white" class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="chk">
+                <label class="form-check-label"  for="chk">I agree to <a href="" style="color: green;">Term and Condtions</a></label>
+            </div>
+            <p id="o-err" style="color: red;font-weight:bold" ></p>
+            <input type="button" class="btn btn-success" style="background: green;" id="s-btn"  value="Next">
+        </div>
+    </div>
+    </div>
+<!------------------------------------------------------------------------------------------------------------------------------->
+    <div class="card" style="width: 40rem;background: rgba(00, 00, 00, 0.0)" id="c-box">
+      <div class="card-body">
+          <div class="container">
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-group">
+                      <input style="background: rgba(00, 00, 00, 0.4);color:white" id="e-otp" type="text" class="form-control" placeholder="Enter Otp">
+                    </div>
+                </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                  <p id="v-err" style="color: red;font-weight:bold" ></p>
+                    <input type="button" class="btn btn-success btn-sm" style="background: green;" id="v-btn" value="Verify">
+                </div>
+          </div>
+        </div>
+            </div>
+
+  <!------------------------------------------------------------------>
+              </form>
+          </div>
+      </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

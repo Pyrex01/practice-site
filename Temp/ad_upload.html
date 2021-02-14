@@ -1,0 +1,570 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js" crossorigin="anonymous"></script>
+    <style>
+      .limit-ad{
+        width: 300px !important;
+        height: 200px !important;
+      }
+    </style>
+    <link rel="stylesheet" href="{% static 'CSS/structure.css'%}">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Upload Your Item</title>
+  </head>
+  <body style="background-color: cadetblue;">
+<!------------------------------------------------------------------>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Categorie
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="post/poster">Post Your Item </a>
+      </li>
+      {% if not user.is_authenticated %}
+      <li class="nav-item active">
+        <a class="nav-link" href="/signup"> Register </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/login">Login </a>
+      </li>
+      {% endif %}
+    </ul>
+    <ul class="navbar-nav mr-auto">
+    <a class="navbar-brand" href="/" style="color:green;">JaldiSell</a>
+      {% if user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Hello,{{user.first_name}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="logout">Logout</a>
+          <a class="dropdown-item" href="\view">View/Edit</a>
+        </div>
+      </li>
+      {% endif %}
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+  <!------------------------------------------------------------------>
+  <div class="card" style="width: 60rem;background: rgba(00, 00, 00, 0.0)">
+    <div class="card-body">
+      <div class="container">
+        <form action="/post/adUp" method="POST" onsubmit="return chekc()" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label style="color: white;" for="item_title">Name of Your Item</label>
+                <input style="background: rgba(00, 00, 00, 0.4);color:white" type="text" name="Title" class="form-control" id="item_title">
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label style="color: white;" for="item_price">Price of your Item</label>
+                <input style="background: rgba(00, 00, 00, 0.4);color:white" type="text" name="price" class="form-control" id="price">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label style="color: white;" for="categorie">Categorie</label>
+              <select name="categoire" id="categorie" style="background: rgba(00, 00, 00, 0.4);color:white" class="form-control">
+                <option value="Default">Default</option>
+                <optgroup label="Mobile">
+                  <option value="Mobile phone">Mobile phone</option>
+                  <option value="Mobile Accessoris">Mobile Accessoris</option>
+                  <option value="Power Banks">Power Banks</option>
+                  <option value="Tablets">Tablets</option>
+                  <option value="Others"></option>
+                </optgroup>
+                <optgroup label="Computers">
+                  <option value="Laptops">Laptops</option>
+                  <option value="Desktop ">Desktop </option>
+                  <option value="Computer">Computer</option>
+                  <option value="Computer Accessories">Computer Accessories</option>
+                  <option value="Pen Drives & Storage">Pen Drives & Storage</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Electronic Appliances">
+                  <option value="Televisions">Televisions</option>
+                  <option value="Kitchen Appliances">Kitchen Appliances</option>
+                  <option value="Washing Machines">Washing Machines</option>
+                  <option value="Refrigerators">Refrigerators</option>
+                  <option value="Air Conditioners">Air Conditioners</option>
+                  <option value="Microwaves">Microwaves</option>
+                  <option value="Chimneys">Chimneys</option>
+                  <option value="Dishwasher">Dishwasher</option>
+                  <option value="Cooler">Cooler</option>
+                  <option value="Speakers">Speakers</option>
+                  <option value="Headphones">Headphones</option>
+                  <option value="Cameras">Cameras</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Men’s Fashion">
+                  <option value="T-Shirts">T-Shirts</option>
+                  <option value="Shirts">Shirts</option>
+                  <option value="Shoes">Shoes</option>
+                  <option value="Watches">Watches</option>
+                  <option value="Sunglasses">Sunglasses</option>
+                  <option value="Designer ">Designer </option>
+                  <option value="Boutique">Boutique</option>
+                  <option value="Men’s ">Men’s </option>
+                  <option value="Sportswear">Sportswear</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Women’s Fashion">
+                  <option value="Clothing">Clothing</option>
+                  <option value="Shoes">Shoes</option>
+                  <option value="Watches">Watches</option>
+                  <option value="Sunglasses">Sunglasses</option>
+                  <option value="Handbags">Handbags</option>
+                  <option value="Designer">Designer </option>
+                  <option value="Boutique">Boutique</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Home Decors">
+                  <option value="Garden & Outdoors">Garden & Outdoors</option>
+                  <option value="Indoor Lighting">Indoor Lighting</option>
+                  <option value="Furniture">Furniture</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Kitchen ">
+                  <option value="Kitchen & Dining">Kitchen & Dining</option>
+                  <option value="Kitchen Appliances">Kitchen Appliances</option>
+                  <option value="Home Appliances">Home Appliances</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Beauty & Health">
+                  <option value="Women’s Styling ">Women’s Styling </option>
+                  <option value="Devices">Devices</option>
+                  <option value="Health care Device">Health care Device</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Sports & Fitness">
+                  <option value="Cycle">Cycle</option>
+                  <option value="Sports Kits">Sports Kits</option>
+                  <option value="Gym Equipment">Gym Equipment</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Luggage">
+                  <option value="Bag packs">Bag packs</option>
+                  <option value="Travel Luggage">Travel Luggage</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Baby Toys">
+                  <option value="Kids Clothing">Kids Clothing</option>
+                  <option value="School Bags">School Bags</option>
+                  <option value="Baby Products">Baby Products</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Four Wheeler">
+                  <option value="Car">Car</option>
+                  <option value="Four Wheeler ">Four Wheeler </option>
+                  <option value="Accessories & Parts">Accessories & Parts</option>
+                  <option value="Bus">Bus</option>
+                  <option value="Goods Carrier">Goods Carrier</option>
+                  <option value="Spare Parts">Spare Parts</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Motorbikes">
+                  <option value="Bikes">Bikes</option>
+                  <option value="Accessories & Parts">Accessories & Parts</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Books">
+                  <option value="Books">Books</option>
+                  <option value="School Textbooks">School Textbooks</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+                <optgroup label="Office Stationeries">
+                  <option value="Office ">Office </option>
+                  <option value="Stationeries">Stationeries</option>
+                  <option value="Photo Copy Machine">Photo Copy Machine</option>
+                  <option value="Others">Others</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="col-sm-3">
+              <label style="color: white;" for="time">How old it is</label>
+              <select style="background: rgba(00, 00, 00, 0.4);color:white" id="time" name="time" class="form-control">
+                <option value="Default"> Default</option>
+                <option value="1 month to 6 month"> 1 month to 6 month</option>
+                <option value="6 month to 12 month">6 month to 12 month</option>
+                <option value="1 years to 2 years">1 years to 2 years</option>
+                <option value="3 years to 5 years">3 years to 5 years</option>
+                <option value="more than 5">more than 5</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label style="color: white;" for="categorie">Location</label>
+              <select style="background: rgba(00, 00, 00, 0.4);color:white" id="location" name="location" class="form-control">
+                <option value="Default"> Default</option>
+                <optgroup style="color: green;background-color:black" label="South Andaman">
+                  <optgroup label="Port Blair">
+                    <option value="Aberdeen Bazar">Aberdeen Bazar</option>
+                      <option value="Beadnabad">Beadnabad</option>
+                      <option value="Bejoy Nagar">Bejoy Nagar</option>
+                      <option value="Bhatubasti">Bhatubasti</option>
+                      <option value="Bimilitan">Bimilitan</option>
+                      <option value="Brichgunj">Brichgunj</option>
+                      <option value="Calicut">Calicut</option>
+                      <option value="Chakkargaon">Chakkargaon</option>
+                      <option value="Dairy farm">Dairy farm</option>
+                      <option value="Delanipur">Delanipur</option>
+                      <option value="Dignabad">Dignabad</option>
+                      <option value="Dollygunj ">Dollygunj </option>
+                      <option value="GaracharmaGovinda Nagar">GaracharmaGovinda Nagar</option>
+                      <option value="Haddo">Haddo</option>
+                      <option value="Havelock (Swaraj Dweep)">Havelock (Swaraj Dweep)</option>
+                      <option value="Junglighat">Junglighat</option>
+                      <option value="Lakshmanpur ">Lakshmanpur </option>
+                      <option value="Middle point">Middle point</option>
+                      <option value="Minnie Bay part ">Minnie Bay part </option>
+                      <option value="Nayagaon">Nayagaon</option>
+                      <option value="Neil (Shaheed Dweep)">Neil (Shaheed Dweep)</option>
+                      <option value="Pahargaon part ">Pahargaon part </option>
+                      <option value="Phoenix bay">Phoenix bay</option>
+                      <option value="Port Blair">Port Blair</option>
+                      <option value="Prothrapur">Prothrapur</option>
+                      <option value="Radha Nagar">Radha Nagar</option>
+                      <option value="Ram Nagar">Ram Nagar</option>
+                      <option value="Rangachang">Rangachang</option>
+                      <option value="School Line">School Line</option>
+                      <option value="Shadipur">Shadipur</option>
+                      <option value="Shyam Nagar">Shyam Nagar</option>
+                      <option value="Sippighat">Sippighat</option>
+                      <option value=" Sitapur"> Sitapur</option>
+                      <option value="south point">south point</option>
+                      <option value="Teylorabad ">Teylorabad </option>
+                  </optgroup>
+                  <optgroup label="Ferrargunj" >
+                    <option value="Bambooflat">Bambooflat</option>
+                      <option value="Bindraban">Bindraban</option>
+                      <option value="Chouldari">Chouldari</option>
+                      <option value="Ferrargunj">Ferrargunj</option>
+                      <option value="Guptapara">Guptapara</option>
+                      <option value="Hope Town">Hope Town</option>
+                      <option value="Knapuram">Knapuram</option>
+                      <option value="Manglutan">Manglutan</option>
+                      <option value="Mannarghat">Mannarghat</option>
+                      <option value="Mithakhari">Mithakhari</option>
+                      <option value="Namunaghar">Namunaghar</option>
+                      <option value="North Bay">North Bay</option>
+                      <option value="Ograbraij">Ograbraij</option>
+                      <option value="Shoal Bay">Shoal Bay</option>
+                      <option value="Shore Point">Shore Point</option>
+                      <option value="Stewartgunj">Stewartgunj</option>
+                      <option value="Tusnabad">Tusnabad</option>
+                      <option value="Wandur">Wandur</option>
+                      <option value="Wimberlygunj">Wimberlygunj</option>
+                  </optgroup>
+                  <optgroup label="Little Andaman">
+                    <option value="Harmender Bay">Harmender Bay</option>
+                    <option value="Hut Bay">Hut Bay</option>
+                    <option value="Netaji Nagar">Netaji Nagar</option>
+                    <option value="Rabindra Nagar">Rabindra Nagar</option>
+                    <option value="Ramakrishnapur">Ramakrishnapur</option>
+                    <option value="Vivekanandapuram">Vivekanandapuram</option>
+                  </optgroup>
+                </optgroup>
+                <optgroup style="color: green;background-color:black" label="North & Middle Andaman">
+                  <optgroup label="diglipur" >
+                    <option value="Diglipur">Diglipur</option>
+                    <option value="Kalighat">Kalighat</option>
+                    <option value="Kishori Nagar">Kishori Nagar</option>
+                    <option value="Laxmipur">Laxmipur</option>
+                    <option value="Madhupur">Madhupur</option>
+                    <option value="Nabagram">Nabagram</option>
+                    <option value="Ramakrishnagram">Ramakrishnagram</option>
+                    <option value="Sitanagar">Sitanagar</option>
+                    <option value="Subhashgram">Subhashgram</option>
+                  </optgroup>
+                  <optgroup label="Rangat">
+                    <option value="Bakultala">Bakultala</option>
+                    <option value="Kadamtala">Kadamtala</option>
+                    <option value="Kaushalyanagar">Kaushalyanagar</option>
+                    <option value="Long Island">Long Island</option>
+                    <option value="Nilambur">Nilambur</option>
+                    <option value="Nimbutala">Nimbutala</option>
+                    <option value="Panchawati">Panchawati</option>
+                    <option value="Rampur">Rampur</option>
+                    <option value="Rangat">Rangat</option>
+                    <option value="Sabari">Sabari</option>
+                    <option value="Santanu">Santanu</option>
+                    <option value="Uttara">Uttara</option>
+                    </optgroup>
+                  <optgroup label="Mayabunder">
+                  <option value="Harinagar">Harinagar</option>
+                    <option value="Karmatang">Karmatang</option>
+                    <option value="Lucknow">Lucknow</option>
+                    <option value="Mayabunder">Mayabunder</option>
+                    <option value="Pahalgaon">Pahalgaon</option>
+                    <option value="Pokadera">Pokadera</option>
+                    <option value="Tugapur">Tugapur</option>
+                  </optgroup>
+                </optgroup>
+                  <optgroup style="color: green;background-color:black" label="Nicobars">
+                    <optgroup label="Car Nicobar">
+                      <option value="Malacca">Malacca</option>
+                      <option value="Mus">Mus</option>
+                      <option value="Perka">Perka</option>
+                      <option value="Sawai">Sawai</option>
+                      <option value="Tamaloo">Tamaloo</option>
+                    </optgroup>
+                    <optgroup label="Great Nicobar">
+                      <option value="Campbell Bay">Campbell Bay</option>
+                    </optgroup>
+                    <optgroup label="Nancowry">
+                      <option value="kamorta">Kamorta</option>
+                    </optgroup>
+                  </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="form-group">
+                <label style="color: white;" for="item_des">Describe Your Item</label>
+                <textarea style="background: rgba(00, 00, 00, 0.4);color:white" name="item_des" id="item_des" class="form-control" cols="50" rows="5"></textarea>
+              </div>
+            </div>
+          </div>
+<!----------------------------------------------------------------------------------------------------------------->
+          <div class="row">
+            <div class="col-sm-5">
+              <div class="row">
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="img1" id="f1" accept="image/x-png,image/gif,image/jpeg" onchange="readURL0(this);" required>
+                    <label style="background: rgba(00, 00, 00, 0.4);color:white" class="custom-file-label" for="f1">Cover  Photo</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <img src="./dummy.png" class="limit-ad" id="place0">
+              </div>
+            </div>
+            <div class="col-sm-5">
+              <div class="row">
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="img2" accept="image/x-png,image/gif,image/jpeg" id="f2" onchange="readURL1(this);" required>
+                    <label style="background: rgba(00, 00, 00, 0.4);color:white" class="custom-file-label" for="f2">more images</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <img src="./dummy.png" class="limit-ad" id="place1">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-5">
+              <div class="row">
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="img3" accept="image/x-png,image/gif,image/jpeg" id="f3" onchange="readURL2(this);" required >
+                    <label style="background: rgba(00, 00, 00, 0.4);color:white" class="custom-file-label" for="f3">more images</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <img src="./dummy.png" class="limit-ad" id="place2">
+              </div>
+            </div>
+            <div class="col-sm-5">
+              <div class="row">
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="img4" accept="image/x-png,image/gif,image/jpeg" id="f4" onchange="readURL3(this);" required >
+                    <label style="background: rgba(00, 00, 00, 0.4);color:white" class="custom-file-label" for="f4">more images</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <img src="./dummy.png" class="limit-ad" id="place3">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-5">
+              <div class="row">
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="img5" accept="image/x-png,image/gif,image/jpeg" id="f5" onchange="readURL4(this);" required >
+                    <label style="background: rgba(00, 00, 00, 0.4);color:white" class="custom-file-label" for="f5">more images</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <img src="./dummy.png" class="limit-ad" id="place4">
+              </div>
+            </div>
+            <div class="col-sm-5">
+              <div class="row">
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="img6" accept="image/x-png,image/gif,image/jpeg" id="f6" onchange="readURL5(this);" required >
+                    <label style="background: rgba(00, 00, 00, 0.4);color:white" class="custom-file-label" for="f6">more images</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <img src="./dummy.png" class="limit-ad" id="place5">
+              </div>
+            </div>
+          </div>
+<!----------------------------------------------------------------------------------------------------------------->
+<div class="row">
+<div style="color:white;font-weight: bold;" class="form-group form-check">
+  <input type="checkbox" class="form-check-input" id="chk">
+  <label class="form-check-label" for="chk">I agree to <a href="" style="color:green">Term and Condtions</a></label>
+</div>
+</div>
+<p id="err" style="color: red;" ></p>
+<div class="row">
+ 
+<input type="submit" class="btn" style="background-color: green;color:white"  value="Post">
+</div>        
+</form>
+      </div>
+    </div>
+  </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function(){
+        $("#place0").hide();
+        $("#place1").hide();
+        $("#place2").hide();
+        $("#place3").hide();
+        $("#place4").hide();
+        $("#place5").hide();
+      });
+    </script>
+    <script>
+      function chekc(){
+        var title = $("#item_title").val();
+        var price = $("#price").val();
+        var categoire = $("#categorie").val();
+        var time = $("#time").val();
+        var location = $("#location").val();
+        var describtion = $("#item_des").val();
+        var chk = document.getElementById("chk").checked;
+        if (title == "" || price==""||categoire=="Default"||time=="Default"||location=="Default"||describtion==""){
+          document.getElementById("err").innerHTML="Please fill all blank spaces and Select appropriate values";
+          return false;
+        }
+        if (describtion.length>300){
+          document.getElementById("err").innerHTML="Please descibe your Post in sufficent words";
+          return false;
+        }
+        if (isNaN(price)){
+          document.getElementById("err").innerHTML="please enter proper price for your Post";
+          return false;
+        }
+        if (!chk){
+          document.getElementById("err").innerHTML="You must agree to our terms and condtition to process";
+          return false;
+        }
+        else{
+          return true;
+        }
+      }
+      function readURL0(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#place0").show();
+                $("#place0").attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function readURL1(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+              $("#place1").show();
+              $("#place1").attr('src', e.target.result);
+          };
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+  function readURL2(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $("#place2").show();
+            $("#place2").attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+function readURL3(input) {
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+          $("#place3").show();
+          $("#place3").attr('src', e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]);
+  }
+}
+function readURL4(input) {
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+          $("#place4").show();
+          $("#place4").attr('src', e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]);
+  }
+}
+function readURL5(input) {
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+          $("#place5").show();
+          $("#place5").attr('src', e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]);
+  }
+}
+    </script>
+  </body>
+</html>

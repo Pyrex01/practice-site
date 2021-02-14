@@ -1,0 +1,128 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function(){
+        $("#submit").click(function(){
+          $.ajax({
+            type: "POST",
+            url: "/login",
+            data: {
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+              number:$("#pn").val(),
+              password:$("#pass").val(),
+            },
+            dataType : "html",
+            success: function (data) {
+              var object = JSON.parse(data);
+              if (object.status=="1"){
+                window.location.href = object.msg;
+              }
+              if(object.status=="0"){
+                document.getElementById("err").innerHTML=object.msg;
+              }
+            }
+          });
+        });
+      });
+    </script>
+    <link rel="stylesheet" href="{% static 'CSS/structure.css'%}">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Login</title>
+  </head>
+  <body style="background-color: cadetblue;">
+<!------------------------------------------------------------------>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Categorie
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="poster">Post Your Item </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="signup"> Register </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav mr-auto">
+        <a class="navbar-brand" href="#" style="color:green;">JaldiSell</a>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+
+  <!------------------------------------------------------------------>
+
+
+  <div class="card" style="width: 26rem;background: rgba(00, 00, 00, 0.0)">
+    <div class="card-body">
+        <div class="container">
+        <form action="login" method="POST">
+          {% csrf_token %}
+            <div class="row">
+            <div class="col-sm">
+            <div class="form-group">
+              <label  style="color:white" for="pn">Phone Number</label>
+              <input type="tel" style="background: rgba(00, 00, 00, 0.4);color:white"pattern="[2-9]{2}[0-9]{8}" name="number" maxlength="10" class="form-control" id="pn">
+            </div>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-sm">
+            <div class="form-group">
+              <label style="color:white" for="pass">Password</label>
+              <input type="password" style="background: rgba(00, 00, 00, 0.4);color:white" class="form-control" name="password" id="pass">
+            </div>
+            </div>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <p style="color: red;font-weight:bold" id="err"></p>
+                <input type="button" value="Login" id="submit" style="background-color:green;" class="btn btn-success">
+              </div>
+              <div class="col-sm">
+                <small id="emailHelp" class="form-text text-muted">  <a href="forgot" style="color: green;font-weight:bold"> Forgot password</a></small>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

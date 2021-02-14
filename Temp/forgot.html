@@ -1,0 +1,233 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'CSS/structure.css'%}">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Home</title>
+  </head>
+  <body>
+<!------------------------------------------------------------------>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Categorie
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="poster">Post Your Item </a>
+      </li>
+      {% if not user.is_authenticated %}
+      <li class="nav-item active">
+        <a class="nav-link" href="/signup"> Register </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/login">Login </a>
+      </li>
+      {% endif %}
+    </ul>
+    <ul class="navbar-nav mr-auto">
+    <a class="navbar-brand" href="/" style="color:green;">JaldiSell</a>
+      {% if user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Hello,{{user.first_name}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="logout">Logout</a>
+          <a class="dropdown-item" href="#">View/Edit</a>
+        </div>
+      </li>
+      {% endif %}
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      {% csrf_token %}
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<!------------------------------------------------------------------>
+  <div id="f-box" class="card" style="width: 40rem;background: rgba(00, 00, 00, 0.0)"">
+    <div class="card-body">
+        <div class="container">
+        <form>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="f-name">Enter Phone number</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="tel" pattern="[2-9]{2}[0-9]{8}" maxlength="10" id="pn" class="form-control" >
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <input type="button" id="n-btn" class="btn btn-success btn-sm" style="background: green;" value="Next">
+                        <p id="f-box-err" style="color: red;font-weight:bold;"></p>
+                    </div>
+              </div>
+            </div>
+        </form>
+      </div>
+  </div>
+</div>
+<!------------------------------------------------------------------>
+<div id="s-box" class="card" style="width: 40rem;background: rgba(00, 00, 00, 0.0)"">
+  <div class="card-body">
+      <div class="container">
+      <form>
+          <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                  <input style="background: rgba(00, 00, 00, 0.4);color:white" id="e-otp" type="text" class="form-control" placeholder="Enter Otp">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+              <div class="form-group">
+                  <input type="button" id="c-btn" class="btn btn-success btn-sm" style="background: green;" value="Confirm">
+                  <p id="c-box-err" style="color: red;font-weight:bold"></p>
+              </div>
+        </div>
+      </div>
+      </form>
+    </div>
+</div>
+</div>
+<!------------------------------------------------------------------>
+  <div class="card" id="v-box" style="width: 40rem;background: rgba(00, 00, 00, 0.0)">
+    <div class="card-body">
+        <div class="container">
+        <form>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="pass">New Password</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="password" id="pass" class="form-control" >
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label style="color: white;" for="c-pass">Confirm New Password</label>
+                        <input style="background: rgba(00, 00, 00, 0.4);color:white" type="password" id="c-pass" class="form-control" >
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <input type="button" value="Update Password" class="btn btn-success" id="u-btn" style="background-color: green;color:white">
+                <p id="v-box.err" style="color: red;font-weight:bold"></p>
+              </div> 
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>  
+<!------------------------------------------------------------------>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+          var otp_val;
+            $("#v-otp").hide();
+            $("#v-box").hide();
+            $("#s-box").hide();
+            $('#n-btn').click(function(){
+              var string = /^[1-9]{1}[0-9]{9}$/;
+              var test = string.test($("#pn").val())
+              if (!test){
+                document.getElementById("f-box-err").innerHTML="Please Enter correct number";
+              }
+              else {
+              $.ajax({
+                type: "POST",
+                url: "recover_chk",
+                data: {
+                  csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                  number:$("#pn").val(),
+                },
+                dataType : "html",
+                success: function (data) {
+                  var object = JSON.parse(data);
+                  if (object.status=="1"){
+                    $('#f-box').hide();
+                    $('#s-box').show();
+                    otp_val=object.msg;
+                  }
+                  if(object.status=="0"){
+                    document.getElementById("f-box-err").innerHTML=object.msg;
+                  }
+                }
+              });
+            }
+            });
+            $("#c-btn").click(function(){
+              var e_otp = $("#e-otp").val();
+              if (otp_val==e_otp){
+                $("#s-box").hide();
+                $("#v-box").show();
+              }
+              if (otp_val!=e_otp){
+                document.getElementById("c-box-err").innerHTML="Wrong Otp";
+              }
+            }); 
+            $("#u-btn").click(function(){
+              var pass = $("#pass").val();
+              var c_pass = $("#c-pass").val();
+              if (pass.length<8){
+                document.getElementById("v-box-err").innerHTML="Password cannot be smaller than 8 charachters";
+              }
+              if (pass != c_pass){
+                document.getElementById("v-box-err").innerHTML="Passwords not matching";
+              }
+              else{
+              $.ajax({
+                type:"POST",
+                url:"pass_update",
+                data: {
+                  csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                  number:$("#pn").val(),
+                  password:$("#c-pass").val(),
+                },
+                dataType: "html",
+                success: function(data){
+                  var temp_obj = JSON.parse(data)
+                  window.location.href = temp_obj.msg;
+                }
+              });
+              }
+            }); 
+        });
+    </script>
+  </body>
+</html>

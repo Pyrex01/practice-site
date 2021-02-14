@@ -1,0 +1,16 @@
+body { 
+  background-color: cadetblue;
+}
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color:white;
+  opacity: 1; /* Firefox */
+}
+.limits{
+    width: 200px;
+    height: 160px;
+  }
+
+.limit-ad{
+  width: 410px;
+  height: 250px;
+}
