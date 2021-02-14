@@ -1,6 +1,7 @@
 # practice-site
 The Web APP while learning
 to run this just pip install django
+                 pip install pillow
 move to directory and on terminal (on linux ) or cmd/power-shell (on windows)
 run 1)python manage.py makemigrations 
     2)python manage.py migrate 
